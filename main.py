@@ -550,12 +550,12 @@ class MacroApp:
         ttk.Label(main_frame, text=f"Build Name: {name}", font=("Helvetica", 11, "bold")).pack(pady=(0, 10))
 
         # Mode Selection (Repeat vs Toggle)
-        mode_frame = ttk.LabelFrame(main_frame, text=" Execution Mode ", padding=5)
-        mode_frame.pack(fill="x", pady=5)
+        self.mode_frame = ttk.LabelFrame(main_frame, text=" Execution Mode ", padding=5)
+        self.mode_frame.pack(fill="x", pady=5)
         
         self.mode_var = tk.StringVar(value=build_data.get("mode", "Repeat"))
-        ttk.Radiobutton(mode_frame, text="Repeat N Times", variable=self.mode_var, value="Repeat", command=self.toggle_mode_ui).pack(side="left", padx=10)
-        ttk.Radiobutton(mode_frame, text="Toggle On/Off (Loop until pressed again)", variable=self.mode_var, value="Toggle", command=self.toggle_mode_ui).pack(side="left", padx=10)
+        ttk.Radiobutton(self.mode_frame, text="Repeat N Times", variable=self.mode_var, value="Repeat", command=self.toggle_mode_ui).pack(side="left", padx=10)
+        ttk.Radiobutton(self.mode_frame, text="Toggle On/Off (Loop until pressed again)", variable=self.mode_var, value="Toggle", command=self.toggle_mode_ui).pack(side="left", padx=10)
 
         # Repeat Count (Only visible if Repeat mode)
         self.rep_frame = ttk.Frame(main_frame)
@@ -565,17 +565,17 @@ class MacroApp:
         self.edit_repeat.set(build_data.get("repeat", 1))
         self.edit_repeat.pack(side="left", padx=10)
         
+        # Action Adder
+        self.add_frame = ttk.LabelFrame(main_frame, text=" Add Action ", padding=5)
+        self.add_frame.pack(fill="x", pady=10)
+        
         self.toggle_mode_ui()
 
-        # Action Adder
-        add_frame = ttk.LabelFrame(main_frame, text=" Add Action ", padding=5)
-        add_frame.pack(fill="x", pady=10)
-
-        self.edit_event_type = ttk.Combobox(add_frame, values=["Key Input", "Wait", "Mouse Move"], state="readonly")
+        self.edit_event_type = ttk.Combobox(self.add_frame, values=["Key Input", "Wait", "Mouse Move"], state="readonly")
         self.edit_event_type.set("Key Input")
         self.edit_event_type.pack(fill="x", pady=2)
         
-        self.edit_options_frame = ttk.Frame(add_frame)
+        self.edit_options_frame = ttk.Frame(self.add_frame)
         self.edit_options_frame.pack(fill="x", pady=5)
         
         self.captured_action_combo = ""
@@ -584,7 +584,7 @@ class MacroApp:
         self.edit_event_type.bind("<<ComboboxSelected>>", lambda e: self.render_edit_options())
         self.render_edit_options()
 
-        btn_frame = ttk.Frame(add_frame)
+        btn_frame = ttk.Frame(self.add_frame)
         btn_frame.pack(fill="x", pady=5)
         ttk.Button(btn_frame, text="Add to Sequence", command=self.add_to_seq).pack(side="left", expand=True, fill="x", padx=2)
         ttk.Button(btn_frame, text="Record Mouse", command=self.record_mouse_actions).pack(side="left", expand=True, fill="x", padx=2)
@@ -780,7 +780,7 @@ class MacroApp:
 
     def toggle_mode_ui(self):
         if self.mode_var.get() == "Repeat":
-            self.rep_frame.pack(fill="x", pady=5, after=self.editor_window.children.get("!labelframe"))
+            self.rep_frame.pack(fill="x", pady=5, after=self.mode_frame)
         else:
             self.rep_frame.pack_forget()
 

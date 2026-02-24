@@ -540,7 +540,7 @@ class MacroApp:
         
         self.editor_window = tk.Toplevel(self.root)
         self.editor_window.title(f"Editing Macro: {name}")
-        self.editor_window.geometry("500x600")
+        self.editor_window.geometry("500x750")
         self.editor_window.transient(self.root)
         self.editor_window.grab_set()
 
